@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import { useThemeStore } from "@/lib/store/theme-store";
 import { api } from "@/services/api";
 
-export function ThemeController() {
+interface ThemeControllerProps {
+    isPreviewMode?: boolean;
+}
+
+export function ThemeController({ isPreviewMode = false }: ThemeControllerProps) {
     const { theme, loadTheme } = useThemeStore();
-    const searchParams = useSearchParams();
-    const isPreviewMode = searchParams.get("preview") === "true";
 
     // Fetch theme from DB on mount (only if NOT in preview mode)
     useEffect(() => {
