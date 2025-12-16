@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useThemeStore } from "@/lib/store/theme-store";
 import { api } from "@/services/api";
 import { useSearchParams } from "next/navigation";
 
-export default function ThemeWrapper({ children }: { children: React.ReactNode }) {
+function ThemeController({ children }: { children: React.ReactNode }) {
     const { theme, setTheme, loadTheme } = useThemeStore();
     const searchParams = useSearchParams();
     const isPreviewMode = searchParams.get("preview") === "true";
@@ -81,4 +81,14 @@ export default function ThemeWrapper({ children }: { children: React.ReactNode }
     }, [theme]);
 
     return <>{children}</>;
+}
+
+export default function ThemeWrapper({ children }: { children: React.ReactNode }) {
+    return (
+        <Suspense fallback={<>{children}</>}>
+            <ThemeController>
+                {children}
+            </ThemeController>
+        </Suspense>
+    );
 }

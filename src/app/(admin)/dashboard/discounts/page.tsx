@@ -1,8 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { Suspense } from "react";
+import nextDynamic from "next/dynamic";
 
-const DiscountsClient = dynamic(() => import("./DiscountsClient"), {
+export const dynamic = "force-dynamic";
+
+const DiscountsClient = nextDynamic(() => import("./DiscountsClient"), {
     ssr: false,
     loading: () => (
         <div className="flex items-center justify-center min-h-screen">
@@ -12,5 +15,13 @@ const DiscountsClient = dynamic(() => import("./DiscountsClient"), {
 });
 
 export default function DiscountsPage() {
-    return <DiscountsClient />;
+    return (
+        <Suspense fallback={
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+        }>
+            <DiscountsClient />
+        </Suspense>
+    );
 }
