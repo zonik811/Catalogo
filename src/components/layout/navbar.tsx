@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useFavoritesUI } from "@/components/shop/favorites-drawer";
 import { useFavoritesStore } from "@/lib/store/favorites-store";
+import Image from "next/image";
 
 // ... imports
 
