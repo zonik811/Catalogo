@@ -88,13 +88,7 @@ export function Navbar() {
                             boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)'
                         }}
                     >
-                           <Image 
-        src="/src/logo.png"  {/* o "/src/logo.png" si está en src */}
-        alt="Logo" 
-        width={32} 
-        height={32}
-        className="object-contain"
-    />
+                           <Image src="/src/logo.png" alt="Logo" width={32} height={32}className="object-contain"/>
                     </motion.div>
                     <span
                         className="text-xl md:text-2xl font-black tracking-tighter"
