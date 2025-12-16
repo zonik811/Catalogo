@@ -23,24 +23,7 @@ export default function ProductDetailPage() {
             if (!params.id) return;
             try {
                 const productData = await api.products.get(params.id as string);
-                let product = productData as unknown as Product;
-
-                // 2. Buscar si tiene descuento activo
-                try {
-                    const discountResponse = await api.discounts.getByProduct(product.$id);
-                    if (discountResponse.documents.length > 0) {
-                        const discount = discountResponse.documents[0] as any; // Usar interfaz Discount si disponible
-                        product = {
-                            ...product,
-                            price: discount.finalPrice,
-                            originalPrice: discount.originalPrice,
-                            discountPercentage: discount.percentage
-                        };
-                    }
-                } catch (err) {
-                    console.error("Error checking discounts:", err);
-                }
-
+                const product = productData as unknown as Product;
                 setProduct(product);
             } catch (error) {
                 console.error("Error fetching product:", error);

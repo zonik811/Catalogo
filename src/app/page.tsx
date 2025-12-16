@@ -173,37 +173,10 @@ export default function Home() {
 
       const response = await api.products.list(businessId);
 
-      // Fetch active discounts
-      let productsWithDiscounts: Product[] = [];
-      try {
-        const discountsResponse = await api.discounts.list(businessId);
-        const discounts = discountsResponse.documents as any[];
-
-        if (response && response.documents) {
-          productsWithDiscounts = response.documents.map((doc: any) => {
-            const product = doc as Product;
-            const discount = discounts.find((d: any) => d.productId === product.$id);
-
-            if (discount) {
-              return {
-                ...product,
-                price: discount.finalPrice, // Display info shows discounted price as main
-                originalPrice: discount.originalPrice,
-                discountPercentage: discount.percentage
-              };
-            }
-            return product;
-          });
-        }
-      } catch (e) {
-        console.error("Error fetching discounts", e);
-        productsWithDiscounts = response?.documents as unknown as Product[] || [];
-      }
-
-
-      if (productsWithDiscounts.length > 0) {
-        setProducts(productsWithDiscounts);
-        console.log(`✅ ${productsWithDiscounts.length} productos cargados (con descuentos)`);
+      if (response && response.documents && response.documents.length > 0) {
+        const products = response.documents as unknown as Product[];
+        setProducts(products);
+        console.log(`✅ ${products.length} productos cargados`);
         setError(false);
       } else {
         console.log("⚠️ No hay productos o respuesta vacía");

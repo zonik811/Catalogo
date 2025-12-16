@@ -128,51 +128,5 @@ export const api = {
                 data
             );
         }
-    },
-    discounts: {
-        list: async (businessId: string) => {
-            return databases.listDocuments(
-                appwriteConfig.databaseId,
-                'discounts', // Collection ID (using string literal as it might not be in config yet)
-                [Query.equal('businessId', businessId)]
-            );
-        },
-        create: async (data: any) => {
-            return databases.createDocument(
-                appwriteConfig.databaseId,
-                'discounts',
-                ID.unique(),
-                data
-            );
-        },
-        getByProduct: async (productId: string) => {
-            return databases.listDocuments(
-                appwriteConfig.databaseId,
-                'discounts',
-                [Query.equal('productId', productId)]
-            );
-        },
-        get: async (id: string) => {
-            return databases.getDocument(
-                appwriteConfig.databaseId,
-                'discounts',
-                id
-            );
-        },
-        update: async (id: string, data: any) => {
-            return databases.updateDocument(
-                appwriteConfig.databaseId,
-                'discounts',
-                id,
-                data
-            );
-        },
-        delete: async (id: string) => {
-            return databases.deleteDocument(
-                appwriteConfig.databaseId,
-                'discounts',
-                id
-            );
-        }
     }
 };
