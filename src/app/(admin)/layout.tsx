@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { Button } from "@/components/ui/button";
 import { LayoutDashboard, ShoppingBag, Settings, LogOut, Store, Tag, Palette } from "lucide-react";
 import Link from "next/link";
