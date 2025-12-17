@@ -20,7 +20,7 @@ export default function ThemeEditorPage() {
     const { theme, setTheme } = useThemeStore();
     const [saving, setSaving] = useState(false);
     const iframeRef = useRef<HTMLIFrameElement>(null);
-    const businessId = "694062d100189a008a18";
+    const businessId = process.env.NEXT_PUBLIC_BUSINESS_ID || "";
 
     // Send initial theme when iframe loads
     useEffect(() => {

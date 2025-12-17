@@ -16,7 +16,7 @@ import {
 import { Loader2, Save } from "lucide-react";
 
 export default function SettingsPage() {
-    const businessId = "694062d100189a008a18"; // Tu ID real
+    const businessId = process.env.NEXT_PUBLIC_BUSINESS_ID || "";
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 

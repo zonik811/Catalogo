@@ -42,7 +42,7 @@ const getBusinessId = (): string => {
   }
 
   // Fallback: Real ID
-  return "694062d100189a008a18";
+  return process.env.NEXT_PUBLIC_BUSINESS_ID || "";
 };
 
 interface Category {

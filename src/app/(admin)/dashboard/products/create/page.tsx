@@ -24,7 +24,7 @@ export default function CreateProductPage() {
             </div>
 
             <ProductForm
-                businessId="694062d100189a008a18" // ID real del negocio
+                businessId="694335e800262290919c" // ID real del negocio
                 onSuccess={() => router.push('/dashboard/products')}
             />
         </div>

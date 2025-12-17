@@ -63,7 +63,7 @@ export default function LandingPage() {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
-  const [businessId] = useState("694062d100189a008a18");
+  const [businessId] = useState(process.env.NEXT_PUBLIC_BUSINESS_ID || "");
   const [openFaq, setOpenFaq] = useState<string | null>(null);
   const { addItem } = useCartStore();
 

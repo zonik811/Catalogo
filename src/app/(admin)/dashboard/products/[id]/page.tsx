@@ -58,7 +58,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
             <ProductForm
                 initialData={product}
-                businessId="694062d100189a008a18"
+                businessId="694335e800262290919c"
                 onSuccess={() => router.push('/dashboard/products')}
             />
         </div>

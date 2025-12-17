@@ -69,7 +69,7 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
 
             <DiscountForm
                 initialData={discount}
-                businessId="694062d100189a008a18"
+                businessId="694335e800262290919c"
                 onSuccess={() => router.push('/dashboard/discounts')}
             />
         </div>

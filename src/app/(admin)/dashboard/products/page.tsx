@@ -21,7 +21,7 @@ export default function ProductsPage() {
         setLoading(true);
         try {
             // 'demo' was hardcoded. Now using real business ID.
-            const response = await api.products.list('694062d100189a008a18');
+            const response = await api.products.list('694335e800262290919c');
             if (response.documents.length > 0) {
                 setProducts(response.documents as unknown as Product[]);
             } else {

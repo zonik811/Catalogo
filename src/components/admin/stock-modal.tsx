@@ -33,7 +33,7 @@ export function StockModal({
         setLoading(true);
 
         try {
-            const businessId = "694062d100189a008a18";
+            const businessId = process.env.NEXT_PUBLIC_BUSINESS_ID || "";
 
             // Check if inventory record exists
             const existing = await api.inventory.getByProduct(productId);

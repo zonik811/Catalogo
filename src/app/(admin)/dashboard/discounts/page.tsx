@@ -27,7 +27,7 @@ function DiscountsContent() {
     const fetchDiscounts = async () => {
         setLoading(true);
         try {
-            const response = await api.discounts.list('694062d100189a008a18');
+            const response = await api.discounts.list('694335e800262290919c');
             if (response.documents.length > 0) {
                 const discountsData = response.documents as unknown as Discount[];
 

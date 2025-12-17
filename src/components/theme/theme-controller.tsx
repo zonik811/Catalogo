@@ -35,7 +35,7 @@ export function ThemeController({ isPreviewMode = false }: ThemeControllerProps)
             // Normal mode: fetch from DB
             const fetchTheme = async () => {
                 try {
-                    const businessId = process.env.NEXT_PUBLIC_BUSINESS_ID || "694062d100189a008a18";
+                    const businessId = process.env.NEXT_PUBLIC_BUSINESS_ID || "694335e800262290919c";
                     const remoteTheme = await api.business.getTheme(businessId);
                     if (remoteTheme) {
                         console.log("[Normal Mode] Loaded theme from DB:", remoteTheme);

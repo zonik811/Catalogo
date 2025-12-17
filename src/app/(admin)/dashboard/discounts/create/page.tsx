@@ -24,7 +24,7 @@ export default function CreateDiscountPage() {
             </div>
 
             <DiscountForm
-                businessId="694062d100189a008a18"
+                businessId="694335e800262290919c"
                 onSuccess={() => router.push('/dashboard/discounts')}
             />
         </div>
