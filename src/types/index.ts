@@ -175,6 +175,7 @@ export interface Product {
     isAvailable: boolean;
     originalPrice?: number;
     discountPercentage?: number;
+    stock?: number; // Merged from inventory collection
 }
 
 export interface Discount {
@@ -184,4 +185,182 @@ export interface Discount {
     originalPrice: number;
     percentage: number;
     finalPrice: number;
+}
+
+export interface Inventory {
+    $id: string;
+    businessId: string;
+    productId: string;
+    stock: number;
+    minStock?: number;
+    maxStock?: number;
+}
+
+export interface Order {
+    $id: string;
+    businessId: string;
+    orderNumber: string;
+    customerName?: string;
+    customerPhone?: string;
+    total: number;
+    itemsCount: number;
+    status: 'pending' | 'completed' | 'cancelled';
+    $createdAt: string;
+    $updatedAt: string;
+}
+
+export interface OrderItem {
+    $id: string;
+    orderId: string;
+    businessId: string;
+    productId: string;
+    productName: string;
+    quantity: number;
+    unitPrice: number;
+    subtotal: number;
+    $createdAt: string;
+}
+
+export interface CreateOrderData {
+    businessId: string;
+    customerName?: string;
+    customerPhone?: string;
+    items: {
+        productId: string;
+        productName: string;
+        quantity: number;
+        unitPrice: number;
+        subtotal: number;
+    }[];
+    total: number;
+    itemsCount: number;
+}
+
+export interface OrderStats {
+    totalOrders: number;
+    totalRevenue: number;
+    todayOrders: number;
+    todayRevenue: number;
+    topProducts: {
+        productId: string;
+        productName: string;
+        totalQuantity: number;
+        totalRevenue: number;
+    }[];
+}
+
+// ========================================
+// LANDING PAGE TYPES
+// ========================================
+
+export interface LandingConfig {
+    $id: string;
+    businessId: string;
+    config: {
+        // Hero Section
+        hero: {
+            title: string;
+            subtitle: string;
+            buttonText: string;
+        };
+
+        // Features Section
+        features: {
+            title: string;
+            description: string;
+            icon: string;  // lucide icon name
+        }[];
+
+        // About Section
+        about: {
+            title: string;
+            description: string;
+            mission?: string;
+            vision?: string;
+            yearsExperience?: number;
+        };
+
+        // Featured Products Section
+        products: {
+            title: string;
+            subtitle?: string;
+            count: number;
+        };
+
+        // Brands Section
+        brands: {
+            title: string;
+            subtitle?: string;
+        };
+
+        // FAQ Section
+        faq: {
+            title: string;
+            subtitle?: string;
+        };
+
+        // CTA Section
+        cta: {
+            title: string;
+            subtitle: string;
+            buttonText: string;
+        };
+
+        // Footer
+        footer: {
+            description?: string;
+            copyright: string;
+        };
+
+        // Contact Info
+        contact: {
+            email?: string;
+            phone?: string;
+            address?: string;
+        };
+
+        // Social Media & Schedule
+        social?: {
+            facebook?: string;
+            instagram?: string;
+            twitter?: string;
+            tiktok?: string;
+            youtube?: string;
+            schedule?: {
+                monday?: string;
+                tuesday?: string;
+                wednesday?: string;
+                thursday?: string;
+                friday?: string;
+                saturday?: string;
+                sunday?: string;
+            };
+        };
+    };
+    isActive: boolean;
+    $createdAt: string;
+    $updatedAt: string;
+}
+
+export interface FAQ {
+    $id: string;
+    businessId: string;
+    question: string;
+    answer: string;
+    order: number;
+    isActive: boolean;
+    $createdAt: string;
+    $updatedAt: string;
+}
+
+export interface Brand {
+    $id: string;
+    businessId: string;
+    name: string;
+    logo: string;  // URL
+    url?: string;
+    order: number;
+    isActive: boolean;
+    $createdAt: string;
+    $updatedAt: string;
 }

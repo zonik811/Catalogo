@@ -7,9 +7,11 @@ import { X, Minus, Plus, Trash2, ShoppingBag, ArrowRight, Package } from "lucide
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { ordersApi } from "@/services/orders.api";
+import { toast } from "sonner";
 
 export function CartDrawer() {
-    const { items, isOpen, toggleCart, updateQuantity, removeItem, total } = useCartStore();
+    const { items, isOpen, toggleCart, updateQuantity, removeItem, clearCart, total } = useCartStore();
     const { business } = useBusinessStore();
 
     const itemCount = items.reduce((acc, item) => acc + item.quantity, 0);
@@ -24,16 +26,67 @@ export function CartDrawer() {
     const shippingCost = business?.shippingCost || 0;
     const finalTotal = subtotal + tax + shippingCost;
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
         // Obtener número del negocio o usar fallback
         const phone = business?.whatsapp || "573000000000";
         const businessName = business?.name || "Menú Digital";
 
         if (!phone) {
-            alert("Error: No hay número de WhatsApp configurado para este negocio.");
+            toast.error("Error: No hay número de WhatsApp configurado para este negocio.");
             return;
         }
 
+        if (!business) {
+            toast.error("Error: No se pudo cargar la información del negocio.");
+            return;
+        }
+
+        // 🆕 GUARDAR ORDEN EN APPWRITE
+        try {
+            toast.loading("Validando stock y guardando orden...");
+
+            // Preparar datos de la orden
+            const orderData = {
+                businessId: business.$id,
+                items: items.map(item => ({
+                    productId: item.$id,
+                    productName: item.name,
+                    quantity: item.quantity,
+                    unitPrice: item.price,
+                    subtotal: item.price * item.quantity
+                })),
+                total: finalTotal,
+                itemsCount: items.reduce((acc, item) => acc + item.quantity, 0)
+            };
+
+            // Guardar orden (valida stock automáticamente y lo decrementa)
+            const savedOrder = await ordersApi.create(orderData);
+
+            toast.dismiss();
+            toast.success(`✅ Orden ${savedOrder.orderNumber} guardada!`);
+
+            console.log('📦 Orden guardada:', savedOrder);
+
+        } catch (error: any) {
+            toast.dismiss();
+
+            // Manejar error de stock insuficiente
+            if (error.code === 'INSUFFICIENT_STOCK') {
+                toast.error(
+                    `❌ ${error.message}\nDisponible: ${error.available} | Solicitado: ${error.requested}`,
+                    { duration: 5000 }
+                );
+                return; // NO abrir WhatsApp si falla el stock
+            }
+
+            // Otros errores
+            toast.error(`Error al guardar la orden: ${error.message || 'Intenta nuevamente'}`);
+            console.error('Error guardando orden:', error);
+            return; // NO abrir WhatsApp si hay error
+        }
+
+        // ✅ SI LLEGAMOS AQUÍ, LA ORDEN SE GUARDÓ CORRECTAMENTE
+        // Preparar mensaje de WhatsApp
         const itemsList = items
             .map(item => `• ${item.quantity}x ${item.name} ($${(item.price * item.quantity).toLocaleString()})`)
             .join('\n');
@@ -53,6 +106,10 @@ _Enviado desde el Menú Digital_`;
 
         const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
+
+        // ✅ Limpiar carrito después de confirmar pedido exitoso
+        clearCart();
+        toggleCart(); // Cerrar el drawer también
     };
 
     return (

@@ -20,6 +20,9 @@ export const appwriteConfig = {
         categories: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_CATEGORIES || 'categories',
         themeSettings: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_THEME || 'themeSettings',
         discounts: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_DISCOUNTS || 'discounts',
+        inventory: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_INVENTORY || 'inventory',
+        orders: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ORDERS || 'orders',
+        orderItems: process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ORDER_ITEMS || 'order_items',
     },
     buckets: {
         productImages: 'product-images',

@@ -2,17 +2,20 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Pencil, Trash2, Loader2, RefreshCcw } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, RefreshCcw, Package } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Product } from "@/types";
 import Link from "next/link";
 import { api } from "@/services/api";
+import { StockModal } from "@/components/admin/stock-modal";
 
 export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+    const [stockModalOpen, setStockModalOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -104,12 +107,33 @@ export default function ProductsPage() {
                                         <div>
                                             <h4 className="font-semibold">{product.name}</h4>
                                             <p className="text-sm text-muted-foreground">${product.price.toLocaleString()}</p>
-                                            <span className={`text-xs px-2 py-1 rounded-full ${product.isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                                {product.isAvailable ? 'Disponible' : 'Agotado'}
-                                            </span>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <span className={`text-xs px-2 py-1 rounded-full ${product.isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                    {product.isAvailable ? 'Disponible' : 'Agotado'}
+                                                </span>
+                                                {product.stock !== undefined && (
+                                                    <span className={`text-xs px-2 py-1 rounded-full ${product.stock === 0 ? 'bg-red-100 text-red-700' :
+                                                        product.stock <= 5 ? 'bg-yellow-100 text-yellow-700' :
+                                                            'bg-blue-100 text-blue-700'
+                                                        }`}>
+                                                        Stock: {product.stock}
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-2">
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => {
+                                                setSelectedProduct(product);
+                                                setStockModalOpen(true);
+                                            }}
+                                            title="Gestionar Stock"
+                                        >
+                                            <Package size={18} className="text-purple-500" />
+                                        </Button>
                                         <Link href={`/dashboard/products/${product.$id}`}>
                                             <Button variant="ghost" size="icon">
                                                 <Pencil size={18} className="text-blue-500" />
@@ -125,6 +149,21 @@ export default function ProductsPage() {
                     )}
                 </CardContent>
             </Card>
+
+            {/* Stock Modal */}
+            {selectedProduct && (
+                <StockModal
+                    isOpen={stockModalOpen}
+                    onClose={() => {
+                        setStockModalOpen(false);
+                        setSelectedProduct(null);
+                    }}
+                    productId={selectedProduct.$id}
+                    productName={selectedProduct.name}
+                    currentStock={selectedProduct.stock}
+                    onSuccess={fetchProducts}
+                />
+            )}
         </div>
     );
 }

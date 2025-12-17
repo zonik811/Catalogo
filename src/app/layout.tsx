@@ -7,6 +7,7 @@ import { WhatsAppWidget } from "@/components/whatsapp-widget";
 import { CartDrawer } from "@/components/shop/cart-drawer";
 import { ThemeEditor } from "@/components/theme/theme-editor";
 import { FavoritesDrawer } from "@/components/shop/favorites-drawer";
+import { Toaster } from "sonner";
 
 // Optimización de fuentes con display swap
 const geistSans = Geist({
@@ -217,6 +218,7 @@ export default function RootLayout({
 
           <FavoritesDrawer />
           <CartDrawer />
+          <Toaster position="top-center" richColors closeButton />
 
           {/* ThemeEditor solo en desarrollo */}
           {process.env.NODE_ENV === "development" && <ThemeEditor />}

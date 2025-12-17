@@ -147,6 +147,21 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
                             -{product.discountPercentage}%
                         </motion.div>
                     )}
+
+                    {/* Stock Badge */}
+                    {product.stock !== undefined && product.stock <= 10 && (
+                        <motion.div
+                            initial={{ x: -20, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ delay: product.discountPercentage ? 0.4 : 0.3 }}
+                            className={`absolute ${product.discountPercentage ? 'top-20' : 'top-12'} left-4 px-2 py-1 rounded-md text-xs font-bold shadow-sm ${product.stock === 0
+                                    ? 'bg-red-500 text-white'
+                                    : 'bg-yellow-500 text-white'
+                                }`}
+                        >
+                            {product.stock === 0 ? '❌ AGOTADO' : `⚡ Solo ${product.stock}`}
+                        </motion.div>
+                    )}
                 </div>
 
                 {/* Contenido */}
@@ -229,7 +244,8 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
                                     <button
                                         type="button"
                                         onClick={(e) => adjustQuantity(e, 1)}
-                                        className="w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200 hover:opacity-90 active:scale-90"
+                                        disabled={product.stock !== undefined && quantity >= product.stock}
+                                        className="w-8 h-8 flex items-center justify-center rounded-full transition-all duration-200 hover:opacity-90 active:scale-90 disabled:opacity-40 disabled:cursor-not-allowed"
                                         style={{
                                             background: 'var(--primary)',
                                             color: 'white'
@@ -254,7 +270,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
                                         : "opacity-60 cursor-not-allowed"
                                 )}
                                 onClick={handleAdd}
-                                disabled={!product.isAvailable}
+                                disabled={!product.isAvailable || (product.stock !== undefined && product.stock === 0)}
                                 size="lg"
                             >
                                 {/* Efecto de brillo en hover */}

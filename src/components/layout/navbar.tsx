@@ -78,23 +78,7 @@ export function Navbar() {
             <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
                 {/* Logo con animación */}
                 <Link href="/" className="group flex items-center gap-2.5">
-                    <motion.div
-                        whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.05 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-white w-10 h-10 flex items-center justify-center rounded-xl shadow-lg"
-                        style={{
-                            background: `linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)`,
-                            boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15)'
-                        }}
-                    >
-                        <span className="text-lg font-black">M</span>
-                    </motion.div>
-                    <span
-                        className="text-xl md:text-2xl font-black tracking-tighter"
-                        style={{ color: 'var(--text)' }}
-                    >
-                        MenúDigital
-                    </span>
+                    <img src="/Logo.png" alt="Logo" className="h-16 w-auto" />
                 </Link>
 
                 {/* Desktop Nav con iconos y hover mejorado */}
