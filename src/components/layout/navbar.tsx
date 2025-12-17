@@ -2,7 +2,7 @@
 
 import { useCartStore } from "@/lib/store/cart-store";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Menu as MenuIcon, X, Home, UtensilsCrossed, LayoutDashboard, Heart } from "lucide-react";
+import { ShoppingCart, Menu as MenuIcon, X, Home, ShoppingBag, LayoutDashboard, Heart } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
@@ -63,7 +63,7 @@ export function Navbar() {
 
     const navLinks = [
         { href: "/", label: "Inicio", icon: Home },
-        { href: "/#catalog", label: "Menú", icon: UtensilsCrossed },
+        { href: "/#catalog", label: "Catálogo", icon: ShoppingBag },
         { href: "/dashboard", label: "Admin", icon: LayoutDashboard },
     ];
 
