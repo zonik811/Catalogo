@@ -89,17 +89,79 @@ interface Category {
 }
 
 export default function LandingPage() {
+  // ✅ Estados corregidos y completos
   const [config, setConfig] = useState<LandingConfig['config']>(DEFAULT_CONFIG);
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [productsByCategory, setProductsByCategory] = useState<Record<string, Product[]>>({});
   const [faqs, setFaqs] = useState<FAQ[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [businessId] = useState(process.env.NEXT_PUBLIC_BUSINESS_ID || "");
+  const [openFaq, setOpenFaq] = useState<string | null>(null);
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
+  // ✅ Importar addItem del store
+  const { addItem } = useCartStore();
+
+  // ✅ useEffect para cargar datos
+  useEffect(() => {
+    loadLandingData();
+  }, []);
+
+  // ✅ Función para cargar datos de la API
+  const loadLandingData = async () => {
+    try {
+      // Load config
+      const landingConfig = await api.landingConfig.get(businessId);
+      if (landingConfig) {
+        setConfig(landingConfig.config);
+      }
+
+      // Load products
+      const productsResponse = await api.products.list(businessId);
+      const allProducts = productsResponse.documents;
+      const count = landingConfig?.config.products.count || 6;
+      setFeaturedProducts(allProducts.slice(0, count));
+
+      // Load categories from API
+      const categoriesResponse = await api.categories.list(businessId);
+      const allCategories = categoriesResponse.documents || [];
+      const firstCategories = allCategories.slice(0, 4);
+      setCategories(firstCategories as any);
+
+      // Group products by category
+      const prodsByCat: Record<string, Product[]> = {};
+      firstCategories.forEach((cat: any) => {
+        const categoryProducts = allProducts.filter(
+          (prod: Product) => prod.categoryId === cat.$id
+        );
+        prodsByCat[cat.$id] = categoryProducts.slice(0, 4);
+      });
+      setProductsByCategory(prodsByCat);
+
+      // Load FAQs
+      const faqsList = await api.faq.list(businessId);
+      setFaqs(faqsList);
+
+      // Load brands
+      const brandsList = await api.brands.list(businessId);
+      setBrands(brandsList);
+    } catch (error) {
+      console.error("Error loading landing data:", error);
+    }
+  };
+
   const nextTestimonial = () => {
     setCurrentTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
   };
 
   const prevTestimonial = () => {
     setCurrentTestimonial((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+  };
+
+  const getIcon = (iconName: string) => {
+    const icons: any = { Truck, Star, MessageCircle, DollarSign };
+    return icons[iconName] || Star;
   };
 
   return (
